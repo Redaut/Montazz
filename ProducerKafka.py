@@ -11,6 +11,8 @@ def video_emitter(video):
     video = cv2.VideoCapture(0)
     print(' emitting.....')
 
+    t0 = time.time()
+
     # read the file
     while (video.isOpened):
         # read the image in each frame
@@ -23,10 +25,17 @@ def video_emitter(video):
         # Convert the image to bytes and send to kafka
         producer.send_messages(topic, jpeg.tobytes())
         # To reduce CPU usage create sleep time of 0.2sec
-        time.sleep(0.10)
+        #time.sleep(0.10)
+
+        t1 = time.time()
+        diff = t1-t0
+        if diff > 10:
+            break
+
+
     # clear the capture
     video.release()
     print('done emitting')
 
 #if __name__ == '__main__':
-#    video_emitter('/home/robin/Downloads/lion-sample.m4v')
+#    video_emitter('')
